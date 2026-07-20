@@ -2,7 +2,7 @@
 // Every audit entry stores prevHash + hash, where
 //   hash = sha256(prevHash + action + payload + timestampIso + orgId)
 // Recomputing the chain on read reveals any tampering. This is what we show
-// a SEBI / MCA regulator to prove the compliance trail is intact.
+// a global regulator to prove the compliance trail is intact.
 
 import crypto from "crypto"
 

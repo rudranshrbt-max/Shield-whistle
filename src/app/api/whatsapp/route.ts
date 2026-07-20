@@ -16,7 +16,7 @@ export async function GET() {
   ])
 
   // Deterministic demo number per org (so it's stable across reloads)
-  const demoNumber = `+91 9${(org.id.charCodeAt(0) % 9)}${(org.id.charCodeAt(1) % 10)}${(org.id.charCodeAt(2) % 10)} ${String(10000 + (org.id.charCodeAt(3) % 89999)).slice(0, 5)} ${String(10000 + (org.id.charCodeAt(4) % 89999)).slice(0, 5)}`
+  const demoNumber = `+1 ${100 + (org.id.charCodeAt(0) % 899)}-${String(100 + (org.id.charCodeAt(1) % 899))}-${String(1000 + (org.id.charCodeAt(2) % 8999))}`
 
   return NextResponse.json({
     connected: true,

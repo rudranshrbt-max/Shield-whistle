@@ -24,14 +24,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useApp } from "@/lib/store"
 import { PLANS } from "@/lib/constants"
-import { formatINR, apiFetch } from "@/lib/api-client"
+import { formatUSD, apiFetch } from "@/lib/api-client"
 import { cn } from "@/lib/utils"
 
 const STATS = [
   { value: "48 hrs", label: "To go live", icon: Clock },
   { value: "100%", label: "Anonymous", icon: Fingerprint },
   { value: "E2E", label: "Encrypted", icon: Lock },
-  { value: "₹0", label: "60-day pilot", icon: ShieldCheck },
+  { value: "$0", label: "60-day pilot", icon: ShieldCheck },
 ]
 
 const FEATURES = [
@@ -44,7 +44,7 @@ const FEATURES = [
   {
     icon: MessageSquare,
     title: "WhatsApp submission bot",
-    desc: "Your differentiator. Most Indian employees will never open a web portal — but they already trust WhatsApp. Guided chat files a complete report in minutes.",
+    desc: "Your differentiator. Most employees will never open a web portal — but they already trust WhatsApp. Guided chat files a complete report in minutes.",
     accent: "bg-green-50 text-green-600 ring-green-100",
     badge: "Differentiator",
   },
@@ -88,7 +88,7 @@ const STEPS = [
   {
     n: "03",
     title: "Audit trail proves compliance",
-    desc: "Every action is hash-chained. Export a tamper-evident log for SEBI / MCA / your audit committee. Done.",
+    desc: "Every action is hash-chained. Export a tamper-evident log for SOX, GDPR, or your audit committee. Done.",
   },
 ]
 
@@ -158,8 +158,8 @@ export function LandingView() {
               actually want.
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-zinc-300">
-              SEBI and Companies Act compliant whistleblower + compliance
-              reporting for Indian SMBs. Anonymous web &amp; WhatsApp
+              A globally compliant whistleblower + reporting platform for
+              companies of any size, anywhere. Anonymous web &amp; WhatsApp
               submission, case management, duplicate detection, and a
               tamper-proof audit log.
             </p>
@@ -213,9 +213,9 @@ export function LandingView() {
                 You're legally required to have this. Most companies don't.
               </h2>
               <p className="mt-5 text-lg leading-relaxed text-zinc-600">
-                SEBI LODR and the Companies Act mandate a vigil mechanism for
-                listed companies. One audit finding — or one viral complaint —
-                and you're exposed.
+                Regulations like SOX, the EU Whistleblowing Directive, and
+                similar laws worldwide mandate a formal reporting mechanism.
+                One audit finding — or one viral complaint — and you're exposed.
               </p>
               <ul className="mt-6 space-y-3">
                 {[
@@ -242,10 +242,10 @@ export function LandingView() {
                 </div>
                 <ul className="divide-y divide-zinc-100">
                   {[
-                    { law: "SEBI LODR Reg. 9(6)", need: "Whistleblower mechanism for listed entities" },
-                    { law: "Companies Act §177(9)", need: "Establish a vigil mechanism with adequate safeguards" },
-                    { law: "DPDP Act 2023", need: "Protect whistleblower personal data" },
-                    { law: "POSH Act 2013", need: "Confidential complaint handling" },
+                    { law: "SOX §301/806 (US)", need: "Whistleblower mechanism for listed entities" },
+                    { law: "EU Whistleblowing Directive", need: "Establish a secure reporting channel with safeguards" },
+                    { law: "GDPR / global privacy laws", need: "Protect whistleblower personal data" },
+                    { law: "Local labor & harassment law", need: "Confidential complaint handling" },
                   ].map((r) => (
                     <li key={r.law} className="flex items-start gap-3 px-5 py-3.5">
                       <FileCheck2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
@@ -353,7 +353,7 @@ export function LandingView() {
                 "Guided state-machine conversation — no abandoned half-reports",
                 "Phone number one-way hashed, never persisted in plaintext",
                 "Auto-creates a case + audit entry identical to web reports",
-                "Works on every phone in India. Zero app install.",
+                "Works on every phone, everywhere. Zero app install.",
               ].map((t) => (
                 <li key={t} className="flex items-start gap-2.5 text-sm text-zinc-300">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
@@ -385,7 +385,7 @@ export function LandingView() {
                       <div className="text-[10px] text-green-400">● online · encrypted</div>
                     </div>
                   </div>
-                  <div className="text-[10px] text-zinc-400">+91 98••• ••210</div>
+                  <div className="text-[10px] text-zinc-400">+1 555••• ••210</div>
                 </div>
                 <div className="sw-scroll h-[420px] space-y-2 overflow-y-auto bg-[#0b141a] bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.06),transparent_60%)] p-3">
                   {WHATSAPP_SCRIPT.slice(0, waStep + 1).map((m, i) => (
@@ -438,7 +438,7 @@ export function LandingView() {
               <Users className="mr-1 h-3 w-3" /> Transparent pricing
             </Badge>
             <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
-              Priced for Indian SMBs.
+              Priced for companies of every size, worldwide.
             </h2>
             <p className="mt-4 text-lg text-zinc-600">
               Start with a 60-day free pilot. Upgrade when your audit committee stops sweating.
@@ -462,7 +462,7 @@ export function LandingView() {
                   <div className="text-sm font-semibold uppercase tracking-wide text-emerald-600">{p.name}</div>
                   <div className="mt-3 flex items-baseline gap-1">
                     <span className="text-3xl font-semibold text-zinc-900">
-                      {p.price === 0 ? "Free" : formatINR(p.price)}
+                      {p.price === 0 ? "Free" : formatUSD(p.price)}
                     </span>
                     {p.price > 0 && <span className="text-sm text-zinc-500">/mo</span>}
                   </div>

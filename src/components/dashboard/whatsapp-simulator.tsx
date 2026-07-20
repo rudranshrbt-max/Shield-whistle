@@ -84,7 +84,7 @@ export function WhatsappSimulator({ orgSlug }: { orgSlug: string }) {
           </div>
         </div>
         <Badge variant="outline" className="border-zinc-600 bg-zinc-800 text-[10px] text-zinc-300">
-          +91 98••• ••210
+          +1 555••• ••210
         </Badge>
       </div>
 

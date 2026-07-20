@@ -23,10 +23,10 @@ export async function apiFetch<T = any>(
   return data as T
 }
 
-export function formatINR(n: number): string {
-  return new Intl.NumberFormat("en-IN", {
+export function formatUSD(n: number): string {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "INR",
+    currency: "USD",
     maximumFractionDigits: 0,
   }).format(n)
 }
@@ -50,7 +50,7 @@ export function timeAgo(d: Date | string): string {
 export function formatDate(d: Date | string | null): string {
   if (!d) return "—"
   const date = typeof d === "string" ? new Date(d) : d
-  return date.toLocaleDateString("en-IN", {
+  return date.toLocaleDateString("en-US", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -60,7 +60,7 @@ export function formatDate(d: Date | string | null): string {
 export function formatDateTime(d: Date | string | null): string {
   if (!d) return "—"
   const date = typeof d === "string" ? new Date(d) : d
-  return date.toLocaleString("en-IN", {
+  return date.toLocaleString("en-US", {
     day: "2-digit",
     month: "short",
     year: "numeric",

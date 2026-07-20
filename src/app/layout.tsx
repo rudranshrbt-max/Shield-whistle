@@ -15,27 +15,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShieldWhistle — SEBI & Companies Act compliant whistleblower system",
+  title: "ShieldWhistle — Global whistleblower & compliance reporting",
   description:
-    "Anonymous whistleblower + compliance reporting for Indian SMBs. Web + WhatsApp reporting, case management, tamper-proof audit log. Live in 48 hours.",
+    "Anonymous whistleblower + compliance reporting for companies worldwide. Web + WhatsApp reporting, case management, tamper-proof audit log. Live in 48 hours.",
   keywords: [
     "whistleblower",
     "compliance",
-    "SEBI",
-    "Companies Act",
-    "POSH",
-    "India",
+    "SOX",
+    "GDPR",
+    "EU Whistleblowing Directive",
     "anonymous reporting",
     "case management",
+    "global",
   ],
   authors: [{ name: "ShieldWhistle" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/logo.png",
   },
   openGraph: {
     title: "ShieldWhistle",
     description:
-      "SEBI and Companies Act compliant whistleblower system, live in 48 hours.",
+      "Globally compliant whistleblower system, live in 48 hours.",
     siteName: "ShieldWhistle",
     type: "website",
   },
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ShieldWhistle",
     description:
-      "SEBI and Companies Act compliant whistleblower system, live in 48 hours.",
+      "Globally compliant whistleblower system, live in 48 hours.",
   },
 };
 

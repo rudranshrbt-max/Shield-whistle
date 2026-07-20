@@ -28,7 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useApp, type DashboardTab } from "@/lib/store"
-import { apiFetch, formatINR } from "@/lib/api-client"
+import { apiFetch, formatUSD } from "@/lib/api-client"
 import { cn } from "@/lib/utils"
 import { OverviewTab } from "@/components/dashboard/overview-tab"
 import { InboxTab } from "@/components/dashboard/inbox-tab"
@@ -178,7 +178,7 @@ export function DashboardView() {
             <div className="mt-3 rounded-xl border border-zinc-200 bg-gradient-to-br from-emerald-50 to-white p-3">
               <div className="flex items-center justify-between">
                 <Badge className="bg-emerald-600 text-white hover:bg-emerald-600">{org.plan}</Badge>
-                <span className="text-xs text-zinc-500">{formatINR(org.monthlyFee)}/mo</span>
+                <span className="text-xs text-zinc-500">{formatUSD(org.monthlyFee)}/mo</span>
               </div>
               {pilotDaysLeft !== null && pilotDaysLeft > 0 && (
                 <div className="mt-2 flex items-center gap-1.5 text-xs text-emerald-700">

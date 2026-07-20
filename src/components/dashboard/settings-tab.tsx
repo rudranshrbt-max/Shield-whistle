@@ -15,7 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { apiFetch, formatINR, formatDate } from "@/lib/api-client"
+import { apiFetch, formatUSD, formatDate } from "@/lib/api-client"
 import { PLANS } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
@@ -74,7 +74,7 @@ export function SettingsTab({ org }: { org: any }) {
             <Row label="Industry" value={org.industry} />
             <Row label="Employees" value={`${org.employeeCount}`} />
             <Row label="Plan" value={org.plan} />
-            <Row label="Monthly fee" value={org.monthlyFee ? formatINR(org.monthlyFee) : "Free pilot"} />
+            <Row label="Monthly fee" value={org.monthlyFee ? formatUSD(org.monthlyFee) : "Free pilot"} />
             {pilotDaysLeft !== null && (
               <div className="flex items-center justify-between rounded-lg bg-emerald-50 px-3 py-2 text-xs">
                 <span className="flex items-center gap-1.5 text-emerald-700">
@@ -167,7 +167,7 @@ export function SettingsTab({ org }: { org: any }) {
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold text-emerald-800">{plan?.name ?? org.plan}</span>
                 <span className="text-sm font-semibold text-emerald-800">
-                  {org.monthlyFee ? formatINR(org.monthlyFee) : "Free"}/mo
+                  {org.monthlyFee ? formatUSD(org.monthlyFee) : "Free"}/mo
                 </span>
               </div>
               <p className="mt-0.5 text-xs text-emerald-700">{plan?.tagline}</p>
@@ -185,7 +185,7 @@ export function SettingsTab({ org }: { org: any }) {
                     <span className="font-medium text-zinc-900">{p.name}</span>
                     <span className="ml-2 text-zinc-500">up to {p.maxEmployees} emp</span>
                   </div>
-                  <span className="font-medium text-zinc-700">{p.price === 0 ? "Free" : formatINR(p.price)}/mo</span>
+                  <span className="font-medium text-zinc-700">{p.price === 0 ? "Free" : formatUSD(p.price)}/mo</span>
                 </div>
               ))}
             </div>
@@ -201,7 +201,7 @@ export function SettingsTab({ org }: { org: any }) {
         <CardContent className="flex items-start gap-3 p-4">
           <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
           <div className="text-xs text-zinc-600">
-            <strong className="text-zinc-900">Compliance posture.</strong> This organization meets SEBI LODR Reg. 9(6) and Companies Act §177(9) vigil-mechanism requirements. The tamper-proof audit log is exportable on demand for your audit committee and regulators. Data retention follows the DPDP Act 2023.
+            <strong className="text-zinc-900">Compliance posture.</strong> This organization meets SOX §301/806, EU Whistleblowing Directive, and equivalent global vigil-mechanism requirements. The tamper-proof audit log is exportable on demand for your audit committee and regulators. Data handling follows GDPR and applicable local privacy law.
           </div>
         </CardContent>
       </Card>

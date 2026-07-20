@@ -49,15 +49,15 @@ export const PLANS = [
   {
     id: "GROWTH",
     name: "Growth",
-    price: 15000,
+    price: 199,
     maxEmployees: 500,
-    tagline: "For listed SMBs up to 500 employees",
+    tagline: "For listed & regulated companies up to 500 employees",
     cta: "Start with Growth",
     highlight: true,
     features: [
       "Everything in Pilot, plus:",
       "Up to 500 employees",
-      "SEBI & Companies Act compliance pack",
+      "Global compliance pack (SOX, GDPR, EU Whistleblowing Directive)",
       "Status workflow SLA tracking",
       "Priority WhatsApp onboarding",
       "Dedicated compliance concierge",
@@ -66,7 +66,7 @@ export const PLANS = [
   {
     id: "SCALE",
     name: "Scale",
-    price: 25000,
+    price: 349,
     maxEmployees: 1000,
     tagline: "For mid-market orgs up to 1,000 employees",
     cta: "Talk to sales",
@@ -82,7 +82,7 @@ export const PLANS = [
   {
     id: "ENTERPRISE",
     name: "Enterprise",
-    price: 40000,
+    price: 599,
     maxEmployees: 2000,
     tagline: "For large orgs up to 2,000 employees",
     cta: "Talk to sales",
