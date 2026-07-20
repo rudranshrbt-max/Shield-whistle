@@ -1,0 +1,178 @@
+// ShieldWhistle — SEBI & Companies Act compliant whistleblower system
+// Prisma schema (SQLite). Multi-org isolation enforced at the app layer
+// (every query filters by orgId). All sensitive report content is
+// encrypted at the application layer before being persisted.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  industry      String
+  employeeCount Int
+  plan          String   @default("PILOT") // PILOT | GROWTH | SCALE
+  monthlyFee    Int      @default(0)
+  pilotStartsAt DateTime?
+  pilotEndsAt   DateTime?
+  // encryption key per org (base64, 32 bytes -> AES-256-GCM)
+  encKeyB64     String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  users    User[]
+  reports  Report[]
+  cases    Case[]
+  auditLog AuditLog[]
+  sessions WhatsappSession[]
+
+  @@index([slug])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  orgId     String
+  email     String   @unique
+  name      String
+  role      String   @default("OFFICER") // ADMIN | OFFICER
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  org      Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  cases    Case[]       @relation("CaseAssignee")
+  messages CaseMessage[]
+
+  @@index([orgId])
+}
+
+// Note: SQLite stores enums as String. We keep type safety in the app layer
+// (see src/lib/constants.ts) and persist String values here.
+
+model Report {
+  id             String   @id @default(cuid())
+  orgId          String
+  // public, unguessable token a whistleblower uses to track status anonymously
+  reportToken    String   @unique
+  channel        String   @default("WEB") // WEB | WHATSAPP
+  category       String   @default("OTHER")
+  severity       String   @default("MEDIUM")
+  department     String
+  accusedName    String
+  accusedRole    String
+  // encrypted (AES-256-GCM) blob, base64
+  encDescription String
+  encLocation    String?
+  incidentDate   DateTime?
+  // optional encrypted contact (only if whistleblower consents)
+  encContact     String?
+  anonymous      Boolean  @default(true)
+  consentFollowup Boolean @default(false)
+  status         String   @default("SUBMITTED")
+  // de-dup signature: hash of (orgId+department+accusedName+category) — used to surface patterns
+  dupSignature   String
+  submittedAt    DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  org      Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  case     Case?
+  auditLog AuditLog[]
+
+  @@index([orgId])
+  @@index([orgId, department])
+  @@index([orgId, accusedName])
+  @@index([dupSignature])
+  @@index([status])
+}
+
+model Case {
+  id         String   @id @default(cuid())
+  orgId      String
+  caseNumber String   @unique // human-friendly, e.g. SW-2025-0001
+  reportId   String   @unique
+  status     String   @default("SUBMITTED") // SUBMITTED | REVIEWING | RESOLVED
+  priority   String   @default("MEDIUM")
+  assignedTo String?
+  resolution String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  resolvedAt DateTime?
+
+  org      Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  report   Report       @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  assignee User?        @relation("CaseAssignee", fields: [assignedTo], references: [id])
+  messages CaseMessage[]
+  auditLog AuditLog[]
+
+  @@index([orgId])
+  @@index([status])
+}
+
+model CaseMessage {
+  id        String   @id @default(cuid())
+  caseId    String
+  authorId  String?
+  authorRole String  @default("OFFICER") // OFFICER | WHISTLEBLOWER | SYSTEM
+  // encrypted content
+  encContent String
+  createdAt DateTime @default(now())
+
+  case   Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  author User? @relation(fields: [authorId], references: [id])
+
+  @@index([caseId])
+}
+
+// Tamper-proof audit log. Each entry chains to the previous one via
+// prevHash + sha256(content + timestamp + prevHash) => hash. Re-computing
+// the chain on read reveals any tampering.
+model AuditLog {
+  id         String   @id @default(cuid())
+  // Monotonic sequence — the backbone of the hash chain. Ordering by seq
+  // (not timestamp) guarantees we always pick the true "last" entry even
+  // when multiple entries are written within the same millisecond.
+  seq        Int
+  orgId      String
+  caseId     String?
+  reportId   String?
+  actorType  String   @default("SYSTEM") // SYSTEM | OFFICER | WHISTLEBLOWER
+  actorEmail String?
+  action     String   // e.g. REPORT_SUBMITTED, STATUS_CHANGED, CASE_ASSIGNED
+  // JSON string with before/after + metadata
+  payload    String
+  prevHash   String   @default("GENESIS")
+  hash       String
+  timestamp  DateTime @default(now())
+
+  org    Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  case   Case?         @relation(fields: [caseId], references: [id])
+  report Report?       @relation(fields: [reportId], references: [id])
+
+  @@index([orgId])
+  @@index([caseId])
+  @@index([timestamp])
+}
+
+model WhatsappSession {
+  id           String   @id @default(cuid())
+  orgId        String
+  // phone is hashed (sha256) — we never store raw numbers
+  phoneHash    String
+  sessionToken String   @unique
+  step         String   @default("AWAIT_CATEGORY") // conversation state machine
+  draft        String   @default("{}") // JSON draft of in-progress report
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([phoneHash])
+}
